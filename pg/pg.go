@@ -23,6 +23,7 @@ type Repository interface {
 	GetAuthor(ctx context.Context, id int64) (Author, error)
 	ListAuthors(ctx context.Context) ([]Author, error)
 	UpdateAuthor(ctx context.Context, arg UpdateAuthorParams) (Author, error)
+	ListAuthorsByAgentID(ctx context.Context, agentID int64) ([]Author, error)
 
 	// book queries
 	CreateBook(ctx context.Context, bookArg CreateBookParams, authorIDs []int64) (*Book, error)
@@ -112,3 +113,4 @@ func (r *repoSvc) UpdateBook(ctx context.Context, bookArg UpdateBookParams, auth
 	})
 	return book, err
 }
+
