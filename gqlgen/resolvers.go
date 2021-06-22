@@ -34,7 +34,14 @@ func (r *bookResolver) Authors(ctx context.Context, obj *pg.Book) ([]pg.Author, 
 }
 
 func (r *mutationResolver) CreateAgent(ctx context.Context, data AgentInput) (*pg.Agent, error) {
-	panic("not implemented")
+	agent, err := r.Repository.CreateAgent(ctx, pg.CreateAgentParams{
+		Name:  data.Name,
+		Email: data.Email,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &agent, nil
 }
 
 func (r *mutationResolver) UpdateAgent(ctx context.Context, id int64, data AgentInput) (*pg.Agent, error) {
@@ -74,7 +81,7 @@ func (r *queryResolver) Agent(ctx context.Context, id int64) (*pg.Agent, error) 
 }
 
 func (r *queryResolver) Agents(ctx context.Context) ([]pg.Agent, error) {
-	panic("not implemented")
+	return r.Repository.ListAgents(ctx)
 }
 
 func (r *queryResolver) Author(ctx context.Context, id int64) (*pg.Author, error) {
