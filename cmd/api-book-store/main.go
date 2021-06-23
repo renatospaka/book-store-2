@@ -5,13 +5,30 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/joho/godotenv"
+
 	"github.com/renatospaka/api-book-store/gqlgen" // update the username
 	"github.com/renatospaka/api-book-store/pg"     // update the username
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		panic(err)
+	}
+
+	// username, password, database :=
+	// 		os.Getenv("POSTGRES_USER"),
+	// 		os.Getenv("POSTGRES_PASSWORD"),
+	// 		os.Getenv("POSTGRES_DB")
+	username, _ := os.LookupEnv("POSTGRES_USER")
+	password, _ := os.LookupEnv("POSTGRES_PASSWORD")
+	database, _ := os.LookupEnv("POSTGRES_DB")
+
 	// initialize the db
-	db, err := pg.Open("dbname=book-store_db sslmode=disable")
+	dsn := fmt.Sprintf("user=%s password=%s dbname=%s",
+					username, password, database)
+	db, err := pg.Open(dsn)
 	if err != nil {
 		panic(err)
 	}

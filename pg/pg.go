@@ -8,6 +8,11 @@ import (
 	_ "github.com/lib/pq" // required
 )
 
+const (
+	HOST = "postgres"
+	PORT = 15432
+)
+
 // Repository is the application's data layer functionality.
 type Repository interface {
 	// agent queries
@@ -49,7 +54,9 @@ func NewRepository(db *sql.DB) Repository {
 // Open opens a database specified by the data source name.
 // Format: host=foo port=5432 user=bar password=baz dbname=qux sslmode=disable"
 func Open(dataSourceName string) (*sql.DB, error) {
-	return sql.Open("postgres", dataSourceName)
+	//dsn := dataSourceName + " " + fmt.Sprintf("host=%s port=%d sslmode=disable ", HOST, PORT)
+	dsn := dataSourceName + " " + fmt.Sprintf("port=%d sslmode=disable ", PORT)
+	return sql.Open("postgres", dsn)
 }
 
 func (r *repoSvc) withTx(ctx context.Context, txFn func(*Queries) error) error {
